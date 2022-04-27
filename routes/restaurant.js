@@ -1,0 +1,10 @@
+const rest = require('../controller/restaurant');
+const express= require('express');
+const router=express.Router();
+router.get('/getRestaurants',rest.getRest);
+router.get('/getRestaurantById/:id',rest.getRestById);
+router.get('/city/:cityId',rest.getRestByCityId);
+router.post('/',rest.postRest);
+router.put('/:id',rest.putRest);
+router.delete('/:id',rest.deleteRest);
+module.exports=router;
