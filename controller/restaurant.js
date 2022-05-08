@@ -3,30 +3,42 @@ const _ = require('lodash');
 
 exports.getRest = async function (req, res, next) {
 
-let filter = {};
-if(req.query.rate){
-    filter = {rate: req.query.rate};
-}
-if(req.query.cuisineType){
-    filter.cuisineType = {$regex: req.query.cuisineType};
-}
+    let filter = {};
+    if (req.query.rate) {
+        filter = { rate: req.query.rate };
+    }
+    if (req.query.cuisineType) {
+        filter.cuisineType = { $regex: req.query.cuisineType };
+    }
 
-const rest = await Restaurant.find(filter).populate('city','name -_id');
-res.send(rest);
-next();
+    const rest = await Restaurant.find(filter).populate('city', 'name -_id');
+     res.status(200).json({
+          "status": true,
+          "message": "success",
+          "data": rest
+     });
+    next();
 };
 
 exports.getRestById = async function (req, res, next) {
   const rest = await Restaurant.findById(req.params.id).populate("city","name -_id");
   if (!rest) return res.status(404).send("Not found check your id ");
-  res.send(rest);
+   res.status(200).json({
+          "status": true,
+          "message": "success",
+          "data": rest
+     });
   next();
 };
 
 exports.getRestByCityId = async function (req, res, next) {
     const rest = await Restaurant.find({city:req.params.cityId}).select('-city');
     if(!rest) return res.status(404).send('Not found check your id ');
-    res.send(rest);
+     res.status(200).json({
+          "status": true,
+          "message": "success",
+          "data": rest
+     });
     next();
 }
     

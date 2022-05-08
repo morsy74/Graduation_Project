@@ -1,8 +1,40 @@
-const Joi = require('joi');
+const Joi = require("joi");
 const express = require('express');
 const _ = require('lodash');
 const mongoose = require('mongoose');
 const { Tourist, validate } = require('../models/tourist-place');
+
+exports.showAllTourists = async (req, res, next) => {
+  const tourist = await Tourist.find().sort('name');
+  res.status(200).json({
+    "status": true,
+    "message": "success",
+    "data": tourist
+  });
+  next();
+};
+
+exports.getTouristById = async function (req, res, next) {
+  const tourist = await Tourist.findById(req.params.id).populate("city","name -_id");
+  if (!tourist) return res.status(404).send("Not found check your id ");
+  res.status(200).json({
+    "status": true,
+    "message": "success",
+    "data": tourist
+  });
+  next();
+};
+
+exports.getTouristByCityId = async function (req, res, next) {
+  const tourist = await Tourist.find({ city: req.params.cityId }).select('-city');
+  if (!tourist) return res.status(404).send('Not found check your id ');
+  res.status(200).json({
+    "status": true,
+    "message": "success",
+    "data": tourist
+  });
+  next();
+};
 
 exports.addTourist = async (req, res, next) => {
   const { error } = validate(req.body);
@@ -45,8 +77,4 @@ exports.deleteTourist = async (req, res, next) => {
   next();
 };
 
-exports.showAllTourists = async (req, res, next) => {
-  const tourist = await Tourist.find().sort('name');
-  res.send(tourist);
-  next();
-}
+

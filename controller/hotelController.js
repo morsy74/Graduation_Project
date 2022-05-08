@@ -1,8 +1,40 @@
-const Joi = require('joi');
+const Joi = require("joi");
 const express = require('express');
 const _ = require('lodash');
 const mongoose = require('mongoose');
 const { Hotel, validate } = require('../models/hotel');
+
+exports.showAllHotels = async (req, res, next) => {
+  const hotel = await Hotel.find().sort('name');
+  res.status(200).json({
+    "status": true,
+    "message": "success",
+    "data": hotel
+  });
+  next();
+};
+
+exports.getHotelById = async function (req, res, next) {
+  const hotel = await Hotel.findById(req.params.id).populate("city","name -_id");
+  if (!hotel) return res.status(404).send("Not found check your id ");
+  res.status(200).json({
+    "status": true,
+    "message": "success",
+    "data": hotel
+  });
+  next();
+};
+
+exports.getHotelByCityId = async function (req, res, next) {
+  const hotel = await Hotel.find({ city: req.params.cityId }).select('-city');
+  if (!hotel) return res.status(404).send('Not found check your id ');
+  res.status(200).json({
+    "status": true,
+    "message": "success",
+    "data": hotel
+  });
+  next();
+};
 
 exports.addHotel = async (req, res, next) => {
   const { error } = validate(req.body);
@@ -45,8 +77,3 @@ exports.deleteHotel = async (req, res, next) => {
   next();
 };
 
-exports.showAllHotels = async (req, res, next) => {
-  const hotel = await Hotel.find().sort('name');
-  res.send(hotel);
-  next();
-}

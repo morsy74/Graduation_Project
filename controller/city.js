@@ -18,14 +18,22 @@ exports.creatCity = async function (req, res, next) {
 
 exports.getCity = async function (req, res, next) {
     const city = await City.find().sort('name');
-    res.send(city);
+    res.status(200).json({
+    "status": true,
+    "message": "success",
+    "data": city
+  });
     next();
 }
 
 exports.getCityById = async function (req, res, next) {
     const city = await City.findById(req.params.id);
     if (!city) return res.status(404).send("Not fond check your Id");
-    res.send(city);
+    res.status(200).json({
+    "status": true,
+    "message": "success",
+    "data": city
+  });
     next();
 }
 

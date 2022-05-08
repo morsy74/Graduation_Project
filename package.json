@@ -30,6 +30,8 @@
     "morgan": "^1.10.0",
     "node-mailjet": "^3.3.7",
     "nodemon": "^2.0.12",
+    "passport": "^0.5.2",
+    "passport-google-plus-token": "^2.1.0",
     "winston": "^3.3.3",
     "winston-mongodb": "^5.0.7"
   }
